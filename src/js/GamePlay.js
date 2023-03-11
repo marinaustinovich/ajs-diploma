@@ -1,5 +1,5 @@
 import { calcHealthLevel, calcTileType } from './utils';
-import showModal from "./modal";
+import showModal from './modal';
 
 export default class GamePlay {
   constructor() {

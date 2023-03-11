@@ -1,46 +1,32 @@
-// (function () {
-//     console.log('modal')
-//     if (typeof window.CustomEvent === "function") return false;
-//     function CustomEvent(event, params) {
-//         params = params || { bubbles: false, cancelable: false, detail: null };
-//         let evt = document.createEvent('CustomEvent');
-//         evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-//         return evt;
-//     }
-//     window.CustomEvent = CustomEvent;
-// })();
-
 function modalFunc(options) {
-    let
-        _elemModal,
-        _eventShowModal,
-        _eventHideModal,
-        _hiding = false,
-        _destroyed = false,
-        _animationSpeed = 200;
+  let elemModal;
+  let eventShowModal;
+  let eventHideModal;
+  let hiding = false;
+  let destroyed = false;
+  const animationSpeed = 200;
 
-    function _createModal(options) {
-        let
-            elemModal = document.createElement('div'),
+  function createModal(option) {
+    elemModal = document.createElement('div');
 /* eslint-disable */
-            modalTemplate = '<div class="modal__backdrop" data-dismiss="modalFunc"><div class="modal__content"><div class="modal__header"><div class="modal__title" data-modalFunc="title">{{title}}</div><span class="modal__btn-close" data-dismiss="modalFunc" title="Закрыть">×</span></div><div class="modal__body" data-modalFunc="content">{{content}}</div>{{footer}}</div></div>',
-            modalFooterTemplate = '<div class="modal__footer">{{buttons}}</div>',
+            let modalTemplate = '<div class="modal__backdrop" data-dismiss="modalFunc"><div class="modal__content"><div class="modal__header"><div class="modal__title" data-modalFunc="title">{{title}}</div><span class="modal__btn-close" data-dismiss="modalFunc" title="Закрыть">×</span></div><div class="modal__body" data-modalFunc="content">{{content}}</div>{{footer}}</div></div>';
+            let modalFooterTemplate = '<div class="modal__footer">{{buttons}}</div>';
 /* eslint-disable */
-            modalButtonTemplate = '<button type="button" class="{{button_class}}" data-handler={{button_handler}}>{{button_text}}</button>',
-            modalHTML,
-            modalFooterHTML = '';
+            let modalButtonTemplate = '<button type="button" class="{{button_class}}" data-handler={{button_handler}}>{{button_text}}</button>';
+            let modalHTML;
+            let modalFooterHTML = '';
 
         elemModal.classList.add('modalFunc');
-        modalHTML = modalTemplate.replace('{{title}}', options.title || 'Новое окно');
-        modalHTML = modalHTML.replace('{{content}}', options.content || '');
-        if (options.footerButtons) {
-            for (let i = 0, length = options.footerButtons.length; i < length; i++) {
+        modalHTML = modalTemplate.replace('{{title}}', option.title || 'Новое окно');
+        modalHTML = modalHTML.replace('{{content}}', option.content || '');
+        if (option.footerButtons) {
+            for (let i = 0, length = option.footerButtons.length; i < length; i++) {
 /* eslint-disable */
-                let modalFooterButton = modalButtonTemplate.replace('{{button_class}}', options.footerButtons[i].class);
+                let modalFooterButton = modalButtonTemplate.replace('{{button_class}}', option.footerButtons[i].class);
 /* eslint-disable */
-                modalFooterButton = modalFooterButton.replace('{{button_handler}}', options.footerButtons[i].handler);
+                modalFooterButton = modalFooterButton.replace('{{button_handler}}', option.footerButtons[i].handler);
 /* eslint-disable */
-                modalFooterButton = modalFooterButton.replace('{{button_text}}', options.footerButtons[i].text);
+                modalFooterButton = modalFooterButton.replace('{{button_text}}', option.footerButtons[i].text);
                 modalFooterHTML += modalFooterButton;
             }
             modalFooterHTML = modalFooterTemplate.replace('{{buttons}}', modalFooterHTML);
@@ -51,50 +37,50 @@ function modalFunc(options) {
         return elemModal;
     }
 
-    function _showModal() {
-        if (!_destroyed && !_hiding) {
-            _elemModal.classList.add('modal__show');
-            document.dispatchEvent(_eventShowModal);
+    function showModal() {
+        if (!destroyed && !hiding) {
+            elemModal.classList.add('modal__show');
+            document.dispatchEvent(eventShowModal);
         }
     }
 
-    function _hideModal() {
-        _hiding = true;
-        _elemModal.classList.remove('modal__show');
-        _elemModal.classList.add('modal__hiding');
+    function hideModal() {
+        hiding = true;
+        elemModal.classList.remove('modal__show');
+        elemModal.classList.add('modal__hiding');
         setTimeout(function () {
-            _elemModal.classList.remove('modal__hiding');
-            _hiding = false;
-        }, _animationSpeed);
-        document.dispatchEvent(_eventHideModal);
+            elemModal.classList.remove('modal__hiding');
+            hiding = false;
+        }, animationSpeed);
+        document.dispatchEvent(eventHideModal);
     }
 
-    function _handlerCloseModal(e) {
+    function handlerCloseModal(e) {
         if (e.target.dataset.dismiss === 'modalFunc') {
-            _hideModal();
+            hideModal();
         }
     }
 
-    _elemModal = _createModal(options || {});
+    elemModal = createModal(options || {});
 
 
-    _elemModal.addEventListener('click', _handlerCloseModal);
-    _eventShowModal = new CustomEvent('show.modalFunc', { detail: _elemModal });
-    _eventHideModal = new CustomEvent('hide.modalFunc', { detail: _elemModal });
+    elemModal.addEventListener('click', handlerCloseModal);
+    eventShowModal = new CustomEvent('show.modalFunc', { detail: elemModal });
+    eventHideModal = new CustomEvent('hide.modalFunc', { detail: elemModal });
 
     return {
-        show: _showModal,
-        hide: _hideModal,
+        show: showModal,
+        hide: hideModal,
         destroy: function () {
-            _elemModal.parentElement.removeChild(_elemModal);
-            _elemModal.removeEventListener('click', _handlerCloseModal);
-            _destroyed = true;
+            elemModal.parentElement.removeChild(elemModal);
+            elemModal.removeEventListener('click', handlerCloseModal);
+            destroyed = true;
         },
         setContent: function (html) {
-            _elemModal.querySelector('[data-modalFunc="content"]').innerHTML = html;
+            elemModal.querySelector('[data-modalFunc="content"]').innerHTML = html;
         },
         setTitle: function (text) {
-            _elemModal.querySelector('[data-modalFunc="title"]').innerHTML = text;
+            elemModal.querySelector('[data-modalFunc="title"]').innerHTML = text;
         }
     }
 

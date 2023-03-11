@@ -1,5 +1,8 @@
 # Диплом "Advanced JavaScript". Retro Game
 
+[![Build status](https://ci.appveyor.com/api/projects/status/fj4hokcn7546il3y/branch/master?svg=true)](https://ci.appveyor.com/project/marinaustinovich/ajs-diploma/branch/master)
+
+
 ## Концепция игры
 
 Двухмерная игра в стиле фэнтези, где игроку предстоит выставлять своих персонажей против 

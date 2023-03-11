@@ -77,7 +77,7 @@ export default class GameController {
         loadGameState.compTeam.forEach((o) => this.gameState.compTeam.push(restoreChar(o)));
         /* eslint-disable */
         this.gameState.allPlayer = this.gameState.getAllPositions(this.gameState.userTeam, this.gameState.compTeam);
-        this.gamePlay.drawUi(Object.values(themes)[this.gameState.levelGame]);
+        this.gamePlay.drawUi(Object.values(themes)[this.gameState.levelGame - 1]);
         this.gamePlay.redrawPositions(this.gameState.allPlayer);
         this.reset();
         if (this.gameState.point) {
@@ -118,7 +118,7 @@ export default class GameController {
               this.gameState.levelGame += 1;
               this.reset();
 
-              if (this.gameState.levelGame >= 3) {
+              if (this.gameState.levelGame >= 5) {
                 // stop game
                 this.gameState.point = this.gameState.calculateSumPoints();
                 this.gameState.block = true;

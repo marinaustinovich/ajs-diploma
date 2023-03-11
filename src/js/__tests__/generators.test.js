@@ -25,7 +25,7 @@ test.each([
 });
 
 test.each([
-  [[Bowman, Swordsman, Magician], 4, 4, true],
+  [[Bowman, Swordsman, Magician], 4, 10, true],
 ])(('should be character with the fourth level in Team'), (allowedTypes, maxLevel, characterCount, expected) => {
   const { characters } = generateTeam(allowedTypes, maxLevel, characterCount);
   const char = characters.find((el) => el.level === 4);
