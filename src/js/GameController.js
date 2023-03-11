@@ -39,7 +39,7 @@ export default class GameController {
 
   newGame() {
     this.gameState.history.push({
-      levelGame: this.gameState.levelGame - 1,
+      levelGame: this.gameState.levelGame,
       points: this.gameState.point,
     });
     this.gameState.block = false;
@@ -54,8 +54,8 @@ export default class GameController {
 
   saveGame() {
     this.stateService.save(this.gameState);
-    /* eslint-disable */
-    alert('Your game has saved!');
+
+    GamePlay.showMessage('Your game has saved!', '9997');
   }
 
   loadGame() {
@@ -63,7 +63,8 @@ export default class GameController {
       const loadGameState = this.stateService.load();
 
       if (loadGameState) {
-        this.gameState.levelGame = loadGameState.levelGame;
+        /* eslint-disable */
+        loadGameState.block === true ? this.gameState.levelGame = (loadGameState.levelGame - 1) : this.gameState.levelGame = loadGameState.levelGame;
         this.gameState.countClick = loadGameState.countClick;
         this.gameState.history = loadGameState.history;
         this.gameState.isMove = loadGameState.isMove;
@@ -76,13 +77,13 @@ export default class GameController {
         loadGameState.compTeam.forEach((o) => this.gameState.compTeam.push(restoreChar(o)));
         /* eslint-disable */
         this.gameState.allPlayer = this.gameState.getAllPositions(this.gameState.userTeam, this.gameState.compTeam);
-        this.gamePlay.drawUi(Object.values(themes)[this.gameState.levelGame - 1]);
+        this.gamePlay.drawUi(Object.values(themes)[this.gameState.levelGame]);
         this.gamePlay.redrawPositions(this.gameState.allPlayer);
         this.reset();
         if (this.gameState.point) {
-          GamePlay.showPoints(this.gameState.point);
+          GamePlay.showPoints(`Your points ${this.gameState.point}`, '128076');
         } else {
-          GamePlay.showPoints('There\'s no points. \n It\'s the first round.');
+          GamePlay.showPoints('There\'s no points. \n It\'s the first round', '128083');
         }
       } else {
         throw new Error('There`s no game in memory');
@@ -90,7 +91,7 @@ export default class GameController {
     } catch (e) {
       /* eslint-disable */
       console.error(e);
-      GamePlay.showMessage('There`s no game in memory');
+      GamePlay.showMessage('There`s no game in memory', '128075');
       this.newGame();
     }
   }
@@ -117,19 +118,19 @@ export default class GameController {
               this.gameState.levelGame += 1;
               this.reset();
 
-              if (this.gameState.levelGame >= 5) {
+              if (this.gameState.levelGame >= 3) {
                 // stop game
                 this.gameState.point = this.gameState.calculateSumPoints();
                 this.gameState.block = true;
                 this.gamePlay.redrawPositions(this.gameState.allPlayer);
-                /* eslint-disable */
-                alert(`You win! Your points are ${this.gameState.point}`);
+                GamePlay.showMessage(`You win! Your points are ${this.gameState.point}`, '127881');
+
                 return;
               }
               // level up
               this.gameState.survivos = this.gameState.userTeam;
-              /* eslint-disable */
-              alert('Level up!');
+
+              GamePlay.showMessage('Level up!', '9996');
               this.gameState.levelUp();
               this.gamePlay.redrawPositions(this.gameState.allPlayer);
             }
@@ -139,6 +140,7 @@ export default class GameController {
 
       const player = this.gameState.allPlayer.find((el) => el.position === index);
       this.reactOnClick(player, index, ['bowman', 'swordsman', 'magician']);
+
       if (this.gameState.countClick >= 1) {
         this.gameState.isMove = 'comp';
         const responseDoAttackComp = await doAttackComp(this);
@@ -245,9 +247,9 @@ export default class GameController {
       } else if (this.gameState.indexSelect
         && !this.gameState.attackCells.find((item) => item === num)
         && this.gameState.compTeam.find((item) => item.position === num)) {
-        GamePlay.showError("It can't be done");
+        GamePlay.showError("It can't be done", '9940');
       } else if (!this.gameState.activeChar) {
-        GamePlay.showError('This isn`t your character');
+        GamePlay.showError('This isn`t your character', '9995');
       }
     }
   }

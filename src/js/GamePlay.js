@@ -1,4 +1,5 @@
 import { calcHealthLevel, calcTileType } from './utils';
+import showModal from "./modal";
 
 export default class GamePlay {
   constructor() {
@@ -177,19 +178,16 @@ export default class GamePlay {
     this.loadGameListeners.forEach((o) => o.call(null));
   }
 
-  static showError(message) {
-    /* eslint-disable */
-    alert(message);
+  static showError(message, unicode) {
+    showModal(message, unicode);
   }
 
-  static showMessage(message) {
-    /* eslint-disable */
-    alert(message);
+  static showMessage(message, unicode) {
+    showModal(message, unicode);
   }
 
-  static showPoints(message) {
-    /* eslint-disable */
-    alert(message);
+  static showPoints(message, unicode) {
+    showModal(message, unicode);
   }
 
   selectCell(index, color = 'yellow') {

@@ -28,6 +28,7 @@ function chooseRandPosition(boardSize, opponent = false) {
   const rand = Math.floor(Math.random() * cells.length);
   return cells[rand];
 }
+
 /* eslint-disable */
 export default function createPositionsChar(playerTypes, boardSize, opponent, [maxLevel, characterCount]) {
   const positions = [];

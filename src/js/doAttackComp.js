@@ -1,3 +1,5 @@
+import GamePlay from './GamePlay';
+
 export default async function doAttackComp(obj) {
   /* eslint-disable */
   const activeComp = obj.gameState.compTeam.reduce((acc, curr) => (acc.character.attack > curr.character.attack ? acc : curr));
@@ -18,11 +20,19 @@ export default async function doAttackComp(obj) {
       if (obj.gameState.userTeam.length === 0) {
         // stop game
         obj.gameState.block = true;
+        GamePlay.showMessage('You lose!', '129335');
       }
       obj.gamePlay.redrawPositions(obj.gameState.allPlayer);
     }
   } else {
-    activeComp.position = obj.gameState.transitionCells[0];
+    let rand;
+    let isPlayer;
+    do {
+      rand = Math.floor(Math.random() * obj.gameState.transitionCells.length);
+      isPlayer = obj.gameState.allPlayer.find(o => o.position === rand);
+    } while (isPlayer);
+
+    activeComp.position = obj.gameState.transitionCells[rand];
     obj.gamePlay.redrawPositions(obj.gameState.allPlayer);
   }
 
