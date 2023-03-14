@@ -14,6 +14,7 @@ export default async function doAttackComp(obj) {
       userPosition = item.position;
     }
   }
+
   if (isGoal) {
     const responseDoDamage = await obj.doDamage(userPosition);
     if (responseDoDamage) {
@@ -35,7 +36,8 @@ export default async function doAttackComp(obj) {
     activeComp.position = obj.gameState.transitionCells[rand];
     obj.gamePlay.redrawPositions(obj.gameState.allPlayer);
   }
-
+  obj.gameState.activeChar = undefined;
   obj.reset();
+
   return true;
 }

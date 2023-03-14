@@ -79,9 +79,9 @@ export function restoreChar(obj) {
   }
   const char = new CharClass(obj.character.level);
   const restorePositionedChar = new PositionedCharacter(char, obj.position);
-  restorePositionedChar.attack = obj.character.attack;
-  restorePositionedChar.health = obj.character.health;
-  restorePositionedChar.defence = obj.character.defence;
+  restorePositionedChar.character.attack = obj.character.attack;
+  restorePositionedChar.character.health = obj.character.health;
+  restorePositionedChar.character.defence = obj.character.defence;
 
   return restorePositionedChar;
 }
