@@ -288,6 +288,10 @@ body {
   }
 }
 
+.modal__backdrop {
+  padding: 11rem;
+}
+
 .modal__show .modal__backdrop,
 .modal__show .modal__content {
   opacity: 1;

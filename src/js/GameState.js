@@ -18,23 +18,24 @@ export default class GameState {
     this.countClick = 0;
     this.survivos = [];
     this.history = [];
+    this.points = 0;
     this.block = false;
 
     this.initNewTeams();
   }
 
-  getUserTeam([maxLevel, characterCount]) {
+  getUserTeam([maxLevel, charCount]) {
     const userTypes = [Bowman, Swordsman, Magician];
     /* eslint-disable */
-    const userTeam = createPositionsChar(userTypes, this.gamePlay.boardSize, false, [maxLevel, characterCount]);
+    const userTeam = createPositionsChar(userTypes, this.gamePlay.boardSize, false, [maxLevel, charCount]);
     this.userTeam = userTeam;
     return userTeam;
   }
 
-  getCompTeam([maxLevel, characterCount]) {
+  getCompTeam([maxLevel, charCount]) {
     const compTypes = [Vampire, Daemon, Undead];
     /* eslint-disable */
-    const compTeam = createPositionsChar(compTypes, this.gamePlay.boardSize, true, [maxLevel, characterCount]);
+    const compTeam = createPositionsChar(compTypes, this.gamePlay.boardSize, true, [maxLevel, charCount]);
     this.compTeam = compTeam;
     return compTeam;
   }

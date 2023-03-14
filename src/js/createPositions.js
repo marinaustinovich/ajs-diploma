@@ -30,9 +30,11 @@ function chooseRandPosition(boardSize, opponent = false) {
 }
 
 /* eslint-disable */
-export default function createPositionsChar(playerTypes, boardSize, opponent, [maxLevel, characterCount]) {
+export default function createPositionsChar(playerTypes, boardSize, opponent, [maxLevel, charCount]) {
   const positions = [];
-  const team = generateTeam(playerTypes, maxLevel, characterCount);
+  if (maxLevel >= 4) maxLevel = 4;
+  if (charCount >= 10) charCount = 10;
+  const team = generateTeam(playerTypes, maxLevel, charCount);
 
   const randPositions = [];
   team.characters.forEach((char) => {
