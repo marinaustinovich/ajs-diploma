@@ -5,7 +5,12 @@ import cursors from './cursors';
 import getTransitionAttackCells from './transitionAttackCells';
 import doAttackComp from './doAttackComp';
 import { restoreChar } from './createPositions';
-import { getInfo, getMaxRangeAndAttack, restoreCharacters } from './utils';
+import {
+  getAllPositions,
+  getInfo,
+  getMaxRangeAndAttack,
+  restoreCharacters,
+} from './utils';
 
 export default class GameController {
   constructor(gamePlay, stateService) {
@@ -73,7 +78,7 @@ export default class GameController {
       this.gameState.points = loadGameState.points;
 
       this.resetTeams(loadGameState);
-      this.gameState.allPlayer = this.gameState.getAllPositions(
+      this.gameState.allPlayer = getAllPositions(
         this.gameState.userTeam,
         this.gameState.compTeam,
       );
@@ -197,10 +202,7 @@ export default class GameController {
     const player = this.gameState.allPlayer.find((el) => el.position === index);
 
     if (player) {
-      this.gamePlay.showCellTooltip(
-        getInfo(player.character),
-        index,
-      );
+      this.gamePlay.showCellTooltip(getInfo(player.character), index);
     }
 
     if (!this.gameState.activeChar) return;
@@ -329,7 +331,7 @@ export default class GameController {
         this.gameState[teamKey].splice(findIndex, 1);
       }
 
-      this.gameState.allPlayer = this.gameState.getAllPositions(
+      this.gameState.allPlayer = getAllPositions(
         this.gameState.userTeam,
         this.gameState.compTeam,
       );

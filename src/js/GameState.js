@@ -94,7 +94,7 @@ export default class GameState {
       this.levelGame,
       this.levelGame + this.allPlayer.length,
     ]);
-    this.allPlayer = this.getAllPositions(this.userTeam, this.compTeam);
+    this.allPlayer = getAllPositions(this.userTeam, this.compTeam);
   }
 
   calculateSumPoints() {
