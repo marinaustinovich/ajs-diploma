@@ -1,70 +1,45 @@
-import GameController from '../GameController';
 import GamePlay from '../GamePlay';
-import GameStateService from '../GameStateService';
+import GameState from '../GameState';
+import Bowman from '../characters/Bowman';
+import { upAttackDefence } from '../utils';
 
-test('should be two players', () => {
-  const gameController = new GameController(
-    new GamePlay(),
-    new GameStateService(),
-  );
-  /* eslint-disable */
-  const result = gameController.gameState.getAllPositions(
-    gameController.gameState.userTeam,
-    gameController.gameState.compTeam
-  ).length;
-  expect(result).toBe(2);
-});
+describe('GameState', () => {
+  let gameState;
 
-test("should be  one players", () => {
-  const gameController = new GameController(
-    new GamePlay(),
-    new GameStateService()
-  );
-  /* eslint-disable */
-  const result = gameController.gameState.getAllPositions(
-    undefined,
-    gameController.gameState.compTeam
-  ).length;
-  expect(result).toBe(1);
-});
+  beforeEach(() => {
+    const gamePlay = new GamePlay();
+    gameState = new GameState(gamePlay);
+  });
 
-test("should be one players", () => {
-  const gameController = new GameController(
-    new GamePlay(),
-    new GameStateService()
-  );
-  const result = gameController.gameState.getAllPositions(
-    gameController.gameState.userTeam
-  ).length;
-  expect(result).toBe(1);
-});
+  it('should initialize new teams', () => {
+    gameState.initNewTeams();
+    expect(gameState.userTeam.length).toBeGreaterThan(0);
+    expect(gameState.compTeam.length).toBeGreaterThan(0);
+  });
 
-test("should up attack", () => {
-  const gameController = new GameController(
-    new GamePlay(),
-    new GameStateService()
-  );
-  gameController.gameState.upAttackDefence(10, 10);
-  const result = gameController.gameState.upAttackDefence(10, 10);
-  expect(result).toBe(10);
-});
+  it('should level up players', () => {
+    const attackBefore = 100;
+    const healthBefore = 100;
 
-test.each([
-  [
-    {
-      type: "vampire",
-      level: 4,
-      attack: 25,
-      defence: 25,
-      health: 50,
-    },
-    "\u{1F396}4 \u269425 \u{1F6E1}25 \u276450",
-  ],
-])("should get message about character", (player, expected) => {
-  const gameController = new GameController(
-    new GamePlay(),
-    new GameStateService()
-  );
-  const result = gameController.gameState.getInfo(player);
-  expect(result).toBe(expected);
+    gameState.allPlayer = [{ character: new Bowman(1) }];
+    gameState.allPlayer[0].character.attack = attackBefore;
+    gameState.allPlayer[0].character.health = healthBefore;
+    upAttackDefence((before, life) => before + life);
+
+    gameState.updatePlayersStats();
+    const { character: char } = gameState.allPlayer[0];
+
+    expect(char.attack).toBe(180);
+    expect(char.defence).toBe(45);
+    expect(char.level).toBe(2);
+    expect(char.health).toBe(100);
+  });
+
+  it('should calculate sum points', () => {
+    gameState.userTeam = [
+      { character: { health: 30 } },
+      { character: { health: 40 } },
+    ];
+    expect(gameState.calculateSumPoints()).toBe(70);
+  });
 });

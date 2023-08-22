@@ -1,4 +1,10 @@
-import { calcTileType, calcHealthLevel } from '../utils';
+import {
+  calcTileType,
+  calcHealthLevel,
+  getAllPositions,
+  upAttackDefence,
+  getInfo,
+} from '../utils';
 
 test.each([
   [1, 8, 'top', 'top edge'],
@@ -50,4 +56,40 @@ test.each([
   const result = calcHealthLevel(health);
 
   expect(result).toBe(expected);
+});
+
+describe('getAllPositions', () => {
+  it('should return the second array if the first one is empty or null', () => {
+    expect(getAllPositions([], [1, 2, 3])).toEqual([1, 2, 3]);
+    expect(getAllPositions(null, [1, 2, 3])).toEqual([1, 2, 3]);
+  });
+
+  it('should return the first array if the second one is empty or null', () => {
+    expect(getAllPositions([1, 2, 3], [])).toEqual([1, 2, 3]);
+    expect(getAllPositions([1, 2, 3], null)).toEqual([1, 2, 3]);
+  });
+
+  it('should return concatenated arrays if both are non-empty', () => {
+    expect(getAllPositions([1, 2, 3], [4, 5, 6])).toEqual([1, 2, 3, 4, 5, 6]);
+  });
+});
+
+describe('upAttackDefence', () => {
+  it('should calculate the attack/defence correctly', () => {
+    expect(upAttackDefence(100, 50)).toBe(130);
+    expect(upAttackDefence(0, 50)).toBe(0);
+  });
+});
+
+describe('getInfo', () => {
+  it('should return the correct info string', () => {
+    const player = {
+      level: 5,
+      attack: 100,
+      defence: 50,
+      health: 80,
+    };
+    const expectedString = '\u{1F396}5 \u2694100 \u{1F6E1}50 \u276480';
+    expect(getInfo(player)).toBe(expectedString);
+  });
 });
