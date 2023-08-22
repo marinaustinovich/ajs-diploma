@@ -6,8 +6,7 @@ import Team from './Team';
  *
  * @param allowedTypes массив классов
  * @param maxLevel максимальный возможный уровень персонажа
- * @returns генератор, который при каждом вызове
- * возвращает новый экземпляр класса персонажа
+ * @returns генератор, который при каждом вызове возвращает новый экземпляр класса персонажа
  *
  */
 export function* characterGenerator(allowedTypes, maxLevel) {

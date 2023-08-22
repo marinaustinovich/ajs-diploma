@@ -22,6 +22,5 @@ export default class Character {
     this.attack = 0;
     this.defence = 0;
     this.health = 50;
-    // TODO: выбросите исключение, если кто-то использует "new Character()"
   }
 }

@@ -30,7 +30,12 @@ function chooseRandPosition(boardSize, opponent = false) {
 }
 
 /* eslint-disable */
-export default function createPositionsChar(playerTypes, boardSize, opponent, [maxLevel, charCount]) {
+export default function createPositionsChar(
+  playerTypes,
+  boardSize,
+  opponent,
+  [maxLevel, charCount]
+) {
   const positions = [];
   if (maxLevel >= 4) maxLevel = 4;
   if (charCount >= 10) charCount = 10;
@@ -57,25 +62,26 @@ export default function createPositionsChar(playerTypes, boardSize, opponent, [m
 export function restoreChar(obj) {
   let CharClass;
   switch (obj.character.type) {
-    case 'bowman':
+    case "bowman":
       CharClass = Bowman;
       break;
-    case 'swordsman':
+    case "swordsman":
       CharClass = Swordsman;
       break;
-    case 'magician':
+    case "magician":
       CharClass = Magician;
       break;
-    case 'daemon':
+    case "daemon":
       CharClass = Daemon;
       break;
-    case 'undead':
+    case "undead":
       CharClass = Undead;
       break;
-    case 'vampire':
+    case "vampire":
       CharClass = Vampire;
       break;
-    default: break;
+    default:
+      break;
   }
   const char = new CharClass(obj.character.level);
   const restorePositionedChar = new PositionedCharacter(char, obj.position);

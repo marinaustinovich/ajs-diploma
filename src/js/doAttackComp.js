@@ -2,9 +2,15 @@ import GamePlay from './GamePlay';
 
 export default async function doAttackComp(obj) {
   /* eslint-disable */
-  const activeComp = obj.gameState.compTeam.reduce((acc, curr) => (acc.character.attack > curr.character.attack ? acc : curr));
+  const activeComp = obj.gameState.compTeam.reduce((acc, curr) =>
+    acc.character.attack > curr.character.attack ? acc : curr
+  );
   obj.gameState.activeChar = activeComp;
-  obj.reactOnClick(activeComp, activeComp.position, ['daemon', 'undead', 'vampire']);
+  obj.reactOnClick(activeComp, activeComp.position, [
+    "daemon",
+    "undead",
+    "vampire",
+  ]);
 
   let isGoal = false;
   let userPosition;
@@ -21,7 +27,7 @@ export default async function doAttackComp(obj) {
       if (obj.gameState.userTeam.length === 0) {
         // stop game
         obj.gameState.block = true;
-        GamePlay.showMessage('You lose!', '129335');
+        GamePlay.showMessage("You lose!", "129335");
       }
       obj.gamePlay.redrawPositions(obj.gameState.allPlayer);
     }
@@ -30,7 +36,7 @@ export default async function doAttackComp(obj) {
     let isPlayer;
     do {
       rand = Math.floor(Math.random() * obj.gameState.transitionCells.length);
-      isPlayer = obj.gameState.allPlayer.find(o => o.position === rand);
+      isPlayer = obj.gameState.allPlayer.find((o) => o.position === rand);
     } while (isPlayer);
 
     activeComp.position = obj.gameState.transitionCells[rand];

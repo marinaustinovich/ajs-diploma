@@ -16,8 +16,4 @@ export default class Team {
   constructor(characters) {
     this.characters = characters;
   }
-
-  // addCharacters(arrCharacters) {
-  //   this.characters = [...this.characters];
-  // }
 }

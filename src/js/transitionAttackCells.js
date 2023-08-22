@@ -1,7 +1,11 @@
 // create two-dimensional field
 function getTable(cells, boardSize) {
   const result = [];
-  for (let s = 0, e = boardSize; s < cells.length; s += boardSize, e += boardSize) {
+  for (
+    let s = 0, e = boardSize;
+    s < cells.length;
+    s += boardSize, e += boardSize
+  ) {
     result.push(cells.slice(s, e));
   }
   return result;
@@ -18,9 +22,13 @@ function getAttackCells(cells, index, maxRange) {
   }
   for (let i = -maxRange; i <= maxRange; i += 1) {
     for (let j = -maxRange; j <= maxRange; j += 1) {
-      if ((row + i) >= 0 && (findIndex + j) >= 0
-        && (row + i < cells.length) && (findIndex + j < cells.length)
-        && (cells[row + i][findIndex + j]) !== index) {
+      if (
+        row + i >= 0
+        && findIndex + j >= 0
+        && row + i < cells.length
+        && findIndex + j < cells.length
+        && cells[row + i][findIndex + j] !== index
+      ) {
         allowedCells.push(cells[row + i][findIndex + j]);
       }
     }
@@ -74,7 +82,12 @@ function getTransitionCells(cells, index, maxRange) {
 }
 
 // returns cells allowed for action
-export default function getTransitionAttackCells(index, boardSize, maxRange, attack = false) {
+export default function getTransitionAttackCells(
+  index,
+  boardSize,
+  maxRange,
+  attack = false,
+) {
   const arrayCells = [];
   for (let i = 0; i < boardSize ** 2; i += 1) {
     arrayCells.push(i);

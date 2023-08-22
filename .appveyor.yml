@@ -1,6 +1,6 @@
-image: Ubuntu2004  # образ для сборки
+image: Ubuntu1804  # образ для сборки
 
-stack: node 19  # окружение
+stack: node 16  # окружение
 
 branches:
   only:
@@ -18,3 +18,4 @@ build_script:
 
 test_script:
   - npm run lint && npm test  # скрипт тестирования
+
