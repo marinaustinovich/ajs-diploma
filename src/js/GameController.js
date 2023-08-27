@@ -59,7 +59,7 @@ export default class GameController {
 
   saveGame() {
     this.stateService.save(this.gameState);
-    GamePlay.showMessage('Your game has saved!', '9997');
+    GamePlay.showModalMessage('Your game has saved!', '9997');
   }
 
   loadGame() {
@@ -93,14 +93,14 @@ export default class GameController {
       this.updatePicture();
       this.showGamePoints();
     } catch (e) {
-      GamePlay.showError("There's no game in memory", '128075');
+      GamePlay.showModalMessage("There's no game in memory", '128075');
       this.newGame();
     }
   }
 
   resetTeams(gameState) {
-    this.gameState.userTeam = restoreCharacters(gameState.userTeam);
-    this.gameState.compTeam = restoreCharacters(gameState.compTeam);
+    this.gameState.userTeam = restoreCharacters(gameState.userTeam, restoreChar);
+    this.gameState.compTeam = restoreCharacters(gameState.compTeam, restoreChar);
   }
 
   showGamePoints() {
@@ -109,7 +109,7 @@ export default class GameController {
       : "There's no points. \n It's the first round";
     const iconCode = this.gameState.points ? '128076' : '128083';
 
-    GamePlay.showPoints(message, iconCode);
+    GamePlay.showModalMessage(message, iconCode);
   }
 
   async onCellClick(index) {
@@ -156,7 +156,7 @@ export default class GameController {
       // await this.checkGameOver();
 
       this.gameState.survivors = this.gameState.userTeam;
-      GamePlay.showMessage(
+      GamePlay.showModalMessage(
         `Level up! Your total points are ${this.gameState.points}`,
         '9996',
       );
@@ -171,7 +171,7 @@ export default class GameController {
   //     this.gameState.point = this.gameState.calculateSumPoints();
   //     this.gameState.block = true;
   //     this.gamePlay.redrawPositions(this.gameState.allPlayer);
-  //     GamePlay.showMessage(`You win! Your points are ${this.gameState.point}`, '127881');
+  //     GamePlay.showModalMessage(`You win! Your points are ${this.gameState.point}`, '127881');
   //     return;
   //   }
   // }
@@ -295,9 +295,9 @@ export default class GameController {
       && !this.gameState.attackCells.find((item) => item === num)
       && this.gameState.compTeam.find((item) => item.position === num)
     ) {
-      GamePlay.showError("It can't be done", '9940');
+      GamePlay.showModalMessage("It can't be done", '9940');
     } else if (!this.gameState.activeChar) {
-      GamePlay.showError('This isn`t your character', '9995');
+      GamePlay.showModalMessage('This isn`t your character', '9995');
     }
   }
 

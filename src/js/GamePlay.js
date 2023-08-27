@@ -1,5 +1,5 @@
 import { calcHealthLevel, calcTileType } from './utils';
-import showModal from './modal';
+import Modal from './Modal';
 
 export default class GamePlay {
   constructor() {
@@ -13,6 +13,8 @@ export default class GamePlay {
     this.newGameListeners = [];
     this.saveGameListeners = [];
     this.loadGameListeners = [];
+
+    this.initModalListener();
   }
 
   bindToDOM(container) {
@@ -20,6 +22,14 @@ export default class GamePlay {
       throw new Error('container is not HTMLElement');
     }
     this.container = container;
+  }
+
+  initModalListener() {
+    document.addEventListener('click', (e) => {
+      if (e.target.dataset.handler === 'modalHandlerCancel' && this.currentModal) {
+        this.currentModal.hide();
+      }
+    });
   }
 
   /**
@@ -97,6 +107,24 @@ export default class GamePlay {
       charEl.appendChild(healthEl);
       cellEl.appendChild(charEl);
     }
+  }
+
+  showModal(message, unicode) {
+    const modal = new Modal({
+      title: message,
+      content: `&#${unicode}`,
+      footerButtons: [
+        {
+          class: 'btn btn__cancel',
+          text: 'Close',
+          handler: 'modalHandlerCancel',
+        },
+      ],
+    });
+
+    this.currentModal = modal;
+
+    modal.show();
   }
 
   /**
@@ -180,16 +208,8 @@ export default class GamePlay {
     this.loadGameListeners.forEach((o) => o.call(null));
   }
 
-  static showError(message, unicode) {
-    showModal(message, unicode);
-  }
-
-  static showMessage(message, unicode) {
-    showModal(message, unicode);
-  }
-
-  static showPoints(message, unicode) {
-    showModal(message, unicode);
+  static showModalMessage(message, unicode) {
+    this.showModal(message, unicode);
   }
 
   selectCell(index, color = 'yellow') {

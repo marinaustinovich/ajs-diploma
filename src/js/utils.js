@@ -1,5 +1,3 @@
-import { restoreChar } from './createPositions';
-
 /**
  * @todo
  * @param index - индекс поля
@@ -83,14 +81,13 @@ export function getMaxRangeAndAttack(type) {
   }
 }
 
-export function restoreCharacters(characters) {
-  return characters.map(restoreChar);
+export function restoreCharacters(characters, restoreFn) {
+  return characters.map(restoreFn);
 }
 
 export function getAllPositions(array1, array2) {
-  if (!array1 || array1.length === 0) return array2;
-  if (!array2 || array2.length === 0) return array1;
-  return array1.concat(array2);
+  if (!array1 || !array2) throw new Error('it must have 2 arguments');
+  return [...array1, ...array2];
 }
 
 export function upAttackDefence(before, life) {

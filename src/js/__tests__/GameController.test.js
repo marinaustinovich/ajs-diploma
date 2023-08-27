@@ -7,7 +7,7 @@ jest.mock('../GamePlay', () => {
   const originalModule = jest.requireActual('../GamePlay');
   return {
     ...originalModule,
-    showMessage: jest.fn(),
+    showModalMessage: jest.fn(),
   };
 });
 
@@ -53,7 +53,7 @@ describe('GameController newGame method', () => {
 });
 
 test('should save the game state', async () => {
-  const mockGamePlay = { showMessage: GamePlay.showMessage };
+  const mockGamePlay = { showModalMessage: GamePlay.showModalMessage };
   const mockStateService = { save: jest.fn() };
   const controller = new GameController(mockGamePlay, mockStateService);
   controller.gameState = {};
@@ -61,5 +61,5 @@ test('should save the game state', async () => {
   await controller.saveGame();
 
   expect(mockStateService.save).toHaveBeenCalledWith(controller.gameState);
-  expect(mockGamePlay.showMessage).toHaveBeenCalledWith('Your game has saved!', '9997');
+  expect(mockGamePlay.showModalMessage).toHaveBeenCalledWith('Your game has saved!', '9997');
 });

@@ -27,7 +27,7 @@ export default async function doAttackComp(obj) {
       if (obj.gameState.userTeam.length === 0) {
         // stop game
         obj.gameState.block = true;
-        GamePlay.showMessage("You lose!", "129335");
+        GamePlay.showModalMessage("You lose!", "129335");
       }
       obj.gamePlay.redrawPositions(obj.gameState.allPlayer);
     }
