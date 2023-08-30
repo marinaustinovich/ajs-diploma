@@ -60,34 +60,24 @@ export default function createPositionsChar(
 }
 
 export function restoreChar(obj) {
-  let CharClass;
-  switch (obj.character.type) {
-    case "bowman":
-      CharClass = Bowman;
-      break;
-    case "swordsman":
-      CharClass = Swordsman;
-      break;
-    case "magician":
-      CharClass = Magician;
-      break;
-    case "daemon":
-      CharClass = Daemon;
-      break;
-    case "undead":
-      CharClass = Undead;
-      break;
-    case "vampire":
-      CharClass = Vampire;
-      break;
-    default:
-      break;
-  }
-  const char = new CharClass(obj.character.level);
-  const restorePositionedChar = new PositionedCharacter(char, obj.position);
-  restorePositionedChar.character.attack = obj.character.attack;
-  restorePositionedChar.character.health = obj.character.health;
-  restorePositionedChar.character.defence = obj.character.defence;
+  if (!obj) return null;
+ 
+  const charClasses = {
+    bowman: Bowman,
+    swordsman: Swordsman,
+    magician: Magician,
+    daemon: Daemon,
+    undead: Undead,
+    vampire: Vampire,
+  };
+
+  const CharClass = charClasses[obj._character.type] || null;
+  const char = new CharClass(obj._character.level);
+  const restorePositionedChar = new PositionedCharacter(char, obj._position);
+
+  char.attack = obj._character.attack;
+  char.health = obj._character.health;
+  char.defence = obj._character.defence;
 
   return restorePositionedChar;
 }

@@ -79,7 +79,7 @@ export default class Modal {
   }
 
   handlerCloseModal(e) {
-    if (e.target.dataset.dismiss === 'modalFunc') {
+    if (e.target.dataset.dismiss === 'modalFunc' || e.target.dataset.handler) {
       this.hide();
     }
   }

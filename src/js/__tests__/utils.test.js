@@ -1,7 +1,6 @@
 import {
   calcTileType,
   calcHealthLevel,
-  getAllPositions,
   upAttackDefence,
   getInfo,
 } from '../utils';
@@ -56,22 +55,6 @@ test.each([
   const result = calcHealthLevel(health);
 
   expect(result).toBe(expected);
-});
-
-describe('getAllPositions', () => {
-  it('should return the second array if the first one is empty or null', () => {
-    expect(getAllPositions([], [1, 2, 3])).toEqual([1, 2, 3]);
-    expect(getAllPositions(null, [1, 2, 3])).toEqual([1, 2, 3]);
-  });
-
-  it('should return the first array if the second one is empty or null', () => {
-    expect(getAllPositions([1, 2, 3], [])).toEqual([1, 2, 3]);
-    expect(getAllPositions([1, 2, 3], null)).toEqual([1, 2, 3]);
-  });
-
-  it('should return concatenated arrays if both are non-empty', () => {
-    expect(getAllPositions([1, 2, 3], [4, 5, 6])).toEqual([1, 2, 3, 4, 5, 6]);
-  });
 });
 
 describe('upAttackDefence', () => {

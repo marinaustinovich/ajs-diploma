@@ -26,7 +26,10 @@ export default class GamePlay {
 
   initModalListener() {
     document.addEventListener('click', (e) => {
-      if (e.target.dataset.handler === 'modalHandlerCancel' && this.currentModal) {
+      if (
+        e.target.dataset.handler === 'modalHandlerCancel'
+        && this.currentModal
+      ) {
         this.currentModal.hide();
       }
     });
@@ -60,7 +63,6 @@ export default class GamePlay {
     this.loadGameEl.addEventListener('click', (event) => this.onLoadGameClick(event));
 
     this.boardEl = this.container.querySelector('[data-id=board]');
-
     this.boardEl.classList.add(theme);
     for (let i = 0; i < this.boardSize ** 2; i += 1) {
       const cellEl = document.createElement('div');
@@ -103,7 +105,6 @@ export default class GamePlay {
       );
       healthIndicatorEl.style.width = `${position.character.health}%`;
       healthEl.appendChild(healthIndicatorEl);
-
       charEl.appendChild(healthEl);
       cellEl.appendChild(charEl);
     }
@@ -208,7 +209,7 @@ export default class GamePlay {
     this.loadGameListeners.forEach((o) => o.call(null));
   }
 
-  static showModalMessage(message, unicode) {
+  showModalMessage(message, unicode) {
     this.showModal(message, unicode);
   }
 

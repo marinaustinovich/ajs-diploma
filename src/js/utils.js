@@ -65,29 +65,8 @@ export function calcHealthLevel(health) {
   return 'high';
 }
 
-export function getMaxRangeAndAttack(type) {
-  switch (type) {
-    case 'vampire':
-    case 'bowman':
-      return { maxRange: 2, maxAttack: 2 };
-    case 'undead':
-    case 'swordsman':
-      return { maxRange: 4, maxAttack: 1 };
-    case 'daemon':
-    case 'magician':
-      return { maxRange: 1, maxAttack: 4 };
-    default:
-      return { maxRange: 1, maxAttack: 1 };
-  }
-}
-
 export function restoreCharacters(characters, restoreFn) {
   return characters.map(restoreFn);
-}
-
-export function getAllPositions(array1, array2) {
-  if (!array1 || !array2) throw new Error('it must have 2 arguments');
-  return [...array1, ...array2];
 }
 
 export function upAttackDefence(before, life) {
@@ -96,4 +75,9 @@ export function upAttackDefence(before, life) {
 
 export function getInfo(player) {
   return `\u{1F396}${player.level} \u2694${player.attack} \u{1F6E1}${player.defence} \u2764${player.health}`;
+}
+
+export function overwriteProperties(target, source) {
+  Object.assign(target, source);
+  return target;
 }

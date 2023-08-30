@@ -5,10 +5,10 @@ jest.mock('../GameState', () => jest.fn().mockImplementation(() => {}));
 
 jest.mock('../GamePlay', () => {
   const originalModule = jest.requireActual('../GamePlay');
-  return {
-    ...originalModule,
-    showModalMessage: jest.fn(),
-  };
+  class MockGamePlay extends originalModule {
+    showModalMessage = jest.fn();
+  }
+  return MockGamePlay;
 });
 
 describe('GameController initialization', () => {
@@ -53,7 +53,7 @@ describe('GameController newGame method', () => {
 });
 
 test('should save the game state', async () => {
-  const mockGamePlay = { showModalMessage: GamePlay.showModalMessage };
+  const mockGamePlay = new GamePlay();
   const mockStateService = { save: jest.fn() };
   const controller = new GameController(mockGamePlay, mockStateService);
   controller.gameState = {};
