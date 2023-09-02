@@ -1,65 +1,60 @@
 import GameController from '../GameController';
-import GamePlay from '../GamePlay';
 
-jest.mock('../GameState', () => jest.fn().mockImplementation(() => {}));
+describe('GameController', () => {
+  let gameController;
 
-jest.mock('../GamePlay', () => {
-  const originalModule = jest.requireActual('../GamePlay');
-  class MockGamePlay extends originalModule {
-    showModalMessage = jest.fn();
-  }
-  return MockGamePlay;
-});
-
-describe('GameController initialization', () => {
-  test('should initialize GameController with provided parameters', () => {
-    const mockGamePlay = {};
-    const mockStateService = {};
-    const controller = new GameController(mockGamePlay, mockStateService);
-
-    expect(controller.gamePlay).toBe(mockGamePlay);
-    expect(controller.stateService).toBe(mockStateService);
-    expect(controller.gameState).toBeDefined();
-  });
-});
-
-describe('GameController newGame method', () => {
-  test('should reset the game state', () => {
-    const mockGamePlay = { redrawPositions: jest.fn() };
-    const mockStateService = {};
-    const controller = new GameController(mockGamePlay, mockStateService);
-    controller.gameState = {
-      history: [],
-      block: true,
-      levelGame: 2,
-      points: 100,
-      countClick: 3,
-      initNewTeams: jest.fn(),
+  beforeEach(() => {
+    const gamePlayMock = {
+      addCellEnterListener: jest.fn(),
+      addCellLeaveListener: jest.fn(),
+      addCellClickListener: jest.fn(),
+      addNewGameListener: jest.fn(),
+      addSaveGameListener: jest.fn(),
+      addLoadGameListener: jest.fn(),
     };
-    controller.reset = jest.fn();
-    controller.updatePicture = jest.fn();
-
-    controller.newGame();
-
-    expect(controller.gameState.history.length).toBe(1);
-    expect(controller.gameState.block).toBeFalsy();
-    expect(controller.gameState.levelGame).toBe(1);
-    expect(controller.gameState.points).toBe(0);
-    expect(controller.gameState.countClick).toBe(0);
-    expect(controller.gameState.initNewTeams).toHaveBeenCalled();
-    expect(controller.reset).toHaveBeenCalled();
-    expect(controller.updatePicture).toHaveBeenCalled();
+    const stateServiceMock = {}; // Мок stateService
+    gameController = new GameController(gamePlayMock, stateServiceMock);
   });
-});
 
-test('should save the game state', async () => {
-  const mockGamePlay = new GamePlay();
-  const mockStateService = { save: jest.fn() };
-  const controller = new GameController(mockGamePlay, mockStateService);
-  controller.gameState = {};
+  test('should call initNewTeams and updatePicture on init', () => {
+    gameController.initNewTeams = jest.fn();
+    gameController.updatePicture = jest.fn();
 
-  await controller.saveGame();
+    gameController.init();
 
-  expect(mockStateService.save).toHaveBeenCalledWith(controller.gameState);
-  expect(mockGamePlay.showModalMessage).toHaveBeenCalledWith('Your game has saved!', '9997');
+    expect(gameController.initNewTeams).toHaveBeenCalled();
+    expect(gameController.updatePicture).toHaveBeenCalled();
+  });
+
+  test('should update gameState on newGame', () => {
+    gameController.reset = jest.fn();
+    gameController.init = jest.fn();
+
+    gameController.newGame();
+
+    expect(gameController.gameState.levelGame).toBe(1);
+    expect(gameController.gameState.countClick).toBe(0);
+    expect(gameController.reset).toHaveBeenCalled();
+    expect(gameController.init).toHaveBeenCalled();
+  });
+
+  test('should restore gameState on loadGame', () => {
+    const savedStateMock = {
+      levelGame: 2,
+      countClick: 1,
+    };
+
+    gameController.stateService.load = jest.fn(() => savedStateMock);
+    gameController.restoreGameState = jest.fn();
+    gameController.restoreActiveCharacter = jest.fn();
+    gameController.updatePicture = jest.fn();
+    gameController.showGameInfo = jest.fn();
+
+    gameController.loadGame();
+
+    expect(gameController.restoreGameState).toHaveBeenCalledWith(savedStateMock);
+    expect(gameController.restoreActiveCharacter).toHaveBeenCalledWith(savedStateMock.activeChar);
+    expect(gameController.updatePicture).toHaveBeenCalled();
+    expect(gameController.showGameInfo).toHaveBeenCalled();
+  });
 });

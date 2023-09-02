@@ -85,12 +85,13 @@ export default class Modal {
   }
 
   destroy() {
-    this.elemModal.parentElement.removeChild(this.elemModal);
+    if (this.elemModal.parentElement) {
+      this.elemModal.parentElement.removeChild(this.elemModal);
+    }
     this.elemModal.removeEventListener(
       'click',
       this.handlerCloseModal.bind(this),
     );
-    this.destroyed = true;
   }
 
   setContent(html) {

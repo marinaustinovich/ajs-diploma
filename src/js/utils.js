@@ -73,6 +73,10 @@ export function upAttackDefence(before, life) {
   return Math.floor(Math.max(before, (before * (80 + life)) / 100));
 }
 
+export function calculateDamage(attack, defence) {
+  return Math.round(Math.max(attack - defence, attack * 0.3));
+}
+
 export function getInfo(player) {
   return `\u{1F396}${player.level} \u2694${player.attack} \u{1F6E1}${player.defence} \u2764${player.health}`;
 }
@@ -80,4 +84,9 @@ export function getInfo(player) {
 export function overwriteProperties(target, source) {
   Object.assign(target, source);
   return target;
+}
+
+export function getRandomCharacter(team) {
+  const randomIndex = Math.floor(Math.random() * team.length);
+  return team[randomIndex];
 }

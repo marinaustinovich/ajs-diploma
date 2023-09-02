@@ -14,6 +14,7 @@ export default class GameState {
     this.indexSelect = null;
     this.transitionCells = [];
     this.attackCells = [];
+    this.showModal = false;
   }
 
   getAllPlayer() {
@@ -26,17 +27,12 @@ export default class GameState {
   }
 
   getUserPosition() {
-    let position;
-    for (const item of this.userTeam) {
-      if (this.attackCells.includes(item.position)) {
-        position = item.position;
-      }
-    }
-    return position;
+    const foundItem = this.userTeam.find((item) => this.attackCells.includes(item.position));
+    return foundItem ? foundItem.position : undefined;
   }
 
   findPresumedDeceasedPlayer() {
-    return this.getAllPlayer().find((e) => e.position === this.activeCharUser.position);
+    return this.getAllPlayer().find((e) => e.position === this.activeCharUser?.position);
   }
 
   getPresumedDeceasedPlayerInfo(position) {

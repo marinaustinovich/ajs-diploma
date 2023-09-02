@@ -1,8 +1,9 @@
-import Character from '../Character';
+import Character from './Character';
 
 export default class Vampire extends Character {
   constructor(level = 1) {
-    super(level, 'vampire');
+    super(level);
+    this.type = 'vampire';
     this.attack = 25;
     this.defence = 25;
     this.maxRange = 2;

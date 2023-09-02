@@ -1,4 +1,4 @@
-import { upAttackDefence } from './utils';
+import { upAttackDefence } from '../utils';
 
 /**
  * Базовый класс, от которого наследуются классы персонажей

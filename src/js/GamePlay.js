@@ -13,6 +13,7 @@ export default class GamePlay {
     this.newGameListeners = [];
     this.saveGameListeners = [];
     this.loadGameListeners = [];
+    this.isModal = false;
 
     this.initModalListener();
   }
@@ -31,6 +32,7 @@ export default class GamePlay {
         && this.currentModal
       ) {
         this.currentModal.hide();
+        this.isModal = false;
       }
     });
   }
@@ -210,7 +212,10 @@ export default class GamePlay {
   }
 
   showModalMessage(message, unicode) {
-    this.showModal(message, unicode);
+    if (!this.isModal) {
+      this.isModal = true;
+      this.showModal(message, unicode);
+    }
   }
 
   selectCell(index, color = 'yellow') {
@@ -220,6 +225,7 @@ export default class GamePlay {
 
   deselectCell(index) {
     const cell = this.cells[index];
+
     if (cell) {
       cell.classList.remove(
         ...Array.from(cell.classList).filter((o) => o.startsWith('selected')),
@@ -245,7 +251,7 @@ export default class GamePlay {
 
       damageEl.addEventListener('animationend', () => {
         cell.removeChild(damageEl);
-        resolve('show');
+        resolve(true);
       });
     });
   }

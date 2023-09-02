@@ -3,6 +3,10 @@ import {
   calcHealthLevel,
   upAttackDefence,
   getInfo,
+  calculateDamage,
+  restoreCharacters,
+  getRandomCharacter,
+  overwriteProperties,
 } from '../utils';
 
 test.each([
@@ -74,5 +78,77 @@ describe('getInfo', () => {
     };
     const expectedString = '\u{1F396}5 \u2694100 \u{1F6E1}50 \u276480';
     expect(getInfo(player)).toBe(expectedString);
+  });
+
+  describe('restoreCharacters', () => {
+    it('should correctly restore characters', () => {
+      const characters = [{ health: 50 }, { health: 40 }];
+      const restoreFn = (char) => ({ ...char, health: 100 });
+
+      const result = restoreCharacters(characters, restoreFn);
+
+      expect(result).toEqual([{ health: 100 }, { health: 100 }]);
+    });
+  });
+
+  describe('calculateDamage', () => {
+    it('should correctly calculate damage when attack is more than defence', () => {
+      const attack = 100;
+      const defence = 50;
+      const result = calculateDamage(attack, defence);
+
+      expect(result).toBe(50); // 100 - 50
+    });
+
+    it('should return 30% of attack when defence is more than attack', () => {
+      const attack = 50;
+      const defence = 100;
+      const result = calculateDamage(attack, defence);
+
+      expect(result).toBe(15); // 30% of 50
+    });
+  });
+
+  describe('overwriteProperties', () => {
+    it('should correctly overwrite properties of the target object', () => {
+      const target = { a: 1, b: 2, c: 3 };
+      const source = { b: 4, c: 5 };
+
+      const result = overwriteProperties(target, source);
+
+      expect(result).toEqual({ a: 1, b: 4, c: 5 });
+    });
+
+    it('should return the same reference to the target object', () => {
+      const target = { a: 1 };
+      const source = { b: 2 };
+
+      const result = overwriteProperties(target, source);
+
+      expect(result).toBe(target);
+    });
+  });
+
+  describe('getRandomCharacter', () => {
+    it('should return a character from the team', () => {
+      const team = ['char1', 'char2', 'char3'];
+
+      const result = getRandomCharacter(team);
+
+      expect(team).toContain(result);
+    });
+
+    it('should potentially return any character from the team', () => {
+      const team = ['char1', 'char2', 'char3'];
+      const results = new Set();
+
+      for (let i = 0; i < 100; i += 1) {
+        results.add(getRandomCharacter(team));
+      }
+
+      expect(results.has('char1')).toBeTruthy();
+      expect(results.has('char2')).toBeTruthy();
+      expect(results.has('char3')).toBeTruthy();
+    });
   });
 });

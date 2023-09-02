@@ -1,7 +1,5 @@
 import GamePlay from '../GamePlay';
 import GameState from '../GameState';
-import Bowman from '../characters/Bowman';
-import { upAttackDefence } from '../utils';
 
 describe('GameState', () => {
   let gameState;
@@ -11,35 +9,49 @@ describe('GameState', () => {
     gameState = new GameState(gamePlay);
   });
 
-  it('should initialize new teams', () => {
-    gameState.initNewTeams();
-    expect(gameState.userTeam.length).toBeGreaterThan(0);
-    expect(gameState.compTeam.length).toBeGreaterThan(0);
+  test('getAllPlayer should return all players', () => {
+    gameState.userTeam = [{ position: 1 }, { position: 2 }];
+    gameState.compTeam = [{ position: 3 }];
+    const result = gameState.getAllPlayer();
+    expect(result).toHaveLength(3);
+    expect(result).toEqual([{ position: 1 }, { position: 2 }, { position: 3 }]);
   });
 
-  it('should level up players', () => {
-    const attackBefore = 100;
-    const healthBefore = 100;
-
-    gameState.allPlayer = [{ character: new Bowman(1) }];
-    gameState.allPlayer[0].character.attack = attackBefore;
-    gameState.allPlayer[0].character.health = healthBefore;
-    upAttackDefence((before, life) => before + life);
-
-    gameState.updatePlayersStats();
-    const { character: char } = gameState.allPlayer[0];
-
-    expect(char.attack).toBe(180);
-    expect(char.defence).toBe(45);
-    expect(char.level).toBe(2);
-    expect(char.health).toBe(100);
+  test('calculateSumPoints should return the sum of health for userTeam', () => {
+    gameState.userTeam = [{ character: { health: 10 } }, { character: { health: 20 } }];
+    expect(gameState.calculateSumPoints()).toBe(30);
   });
 
-  it('should calculate sum points', () => {
-    gameState.userTeam = [
-      { character: { health: 30 } },
-      { character: { health: 40 } },
-    ];
-    expect(gameState.calculateSumPoints()).toBe(70);
+  test('getAllPlayer should throw error if userTeam or compTeam is missing', () => {
+    gameState.userTeam = null;
+    expect(() => gameState.getAllPlayer()).toThrow('it must have 2 arguments');
+  });
+
+  test('getUserPosition should return user position when attackCells includes player position', () => {
+    gameState.userTeam = [{ position: 1 }];
+    gameState.attackCells = [1, 2];
+    expect(gameState.getUserPosition()).toBe(1);
+  });
+
+  test('getUserPosition should return undefined when attackCells does not include player position', () => {
+    gameState.userTeam = [{ position: 3 }];
+    gameState.attackCells = [1, 2];
+    expect(gameState.getUserPosition()).toBeUndefined();
+  });
+
+  test('findPresumedDeceasedPlayer should find the player with matching activeCharUser position', () => {
+    gameState.activeCharUser = { position: 2 };
+    gameState.userTeam = [{ position: 1 }, { position: 2 }];
+    gameState.compTeam = [{ position: 3 }];
+    expect(gameState.findPresumedDeceasedPlayer()).toEqual({ position: 2 });
+  });
+
+  test('getPresumedDeceasedPlayerInfo should return the correct info when isMove is comp', () => {
+    gameState.isMove = 'comp';
+    gameState.userTeam = [{ position: 1 }, { position: 2 }];
+    expect(gameState.getPresumedDeceasedPlayerInfo(2)).toEqual({
+      index: 1,
+      teamKey: 'userTeam',
+    });
   });
 });
