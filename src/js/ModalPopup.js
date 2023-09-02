@@ -1,4 +1,4 @@
-export default class Modal {
+export default class ModalPopup {
   constructor(options) {
     this.elemModal = null;
     this.eventShowModal = null;
@@ -12,12 +12,8 @@ export default class Modal {
     this.createModal();
     this.elemModal.addEventListener('click', this.handlerCloseModal.bind(this));
 
-    this.eventShowModal = new CustomEvent('show.modalFunc', {
-      detail: this.elemModal,
-    });
-    this.eventHideModal = new CustomEvent('hide.modalFunc', {
-      detail: this.elemModal,
-    });
+    this.eventShowModal = new CustomEvent('show.modalFunc', { detail: this.elemModal });
+    this.eventHideModal = new CustomEvent('hide.modalFunc', { detail: this.elemModal });
   }
 
   createModal() {

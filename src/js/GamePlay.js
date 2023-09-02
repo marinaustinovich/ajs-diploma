@@ -1,4 +1,4 @@
-import Modal from './Modal';
+import ModalPopup from './ModalPopup';
 import { calcHealthLevel, calcTileType } from './utils';
 
 export default class GamePlay {
@@ -113,7 +113,7 @@ export default class GamePlay {
   }
 
   showModal(message, unicode) {
-    const modal = new Modal({
+    const modal = new ModalPopup({
       title: message,
       content: `&#${unicode}`,
       footerButtons: [

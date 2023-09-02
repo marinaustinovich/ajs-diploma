@@ -1,4 +1,4 @@
-import Modal from '../Modal';
+import ModalPopup from '../ModalPopup';
 
 describe('Modal class', () => {
   let modal;
@@ -15,12 +15,10 @@ describe('Modal class', () => {
   };
 
   beforeEach(() => {
-    modal = new Modal(options);
+    modal = new ModalPopup(options);
   });
 
-  afterEach(() => {
-    modal.destroy();
-  });
+  afterEach(() => modal.destroy());
 
   it('should correctly initialize modal with provided options', () => {
     const titleElem = document.querySelector('[data-modalFunc="title"]');
