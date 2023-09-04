@@ -75,6 +75,9 @@ export default class GameController {
   }
 
   saveGame() {
+    this.gameState.attackCells = [];
+    this.gameState.transitionCells = [];
+    this.gameState.activeCharUser = null;
     this.stateService.save(this.gameState);
     this.gamePlay.showModalMessage('Your game has saved!', '9997');
   }
@@ -118,7 +121,11 @@ export default class GameController {
   restoreActiveCharacter(savedActiveChar) {
     const restartedActiveChar = restoreChar(savedActiveChar);
     if (restartedActiveChar && restartedActiveChar.isMove === 'user') {
-      this.reactOnClick(restartedActiveChar, ['bowman', 'swordsman', 'magician']);
+      this.reactOnClick(restartedActiveChar, [
+        'bowman',
+        'swordsman',
+        'magician',
+      ]);
     }
   }
 
@@ -174,11 +181,11 @@ export default class GameController {
   }
 
   levelUp() {
+    const themeValues = Object.values(themes);
+
     this.updateTeams();
-    this.gameState
-      .getAllPlayer()
-      .forEach((player) => player.character.levelUp());
-    this.gamePlay.drawUi(Object.values(themes)[this.gameState.levelGame - 1]);
+    this.gameState.getAllPlayer().forEach((player) => player.character.levelUp());
+    this.gamePlay.drawUi(themeValues[(this.gameState.levelGame - 1) % themeValues.length]);
     this.gameState.countClick = 0;
     this.gameState.indexSelect = null;
   }
@@ -193,7 +200,7 @@ export default class GameController {
       allStartPositions.splice(allStartPositions.indexOf(item.position), 1);
     });
 
-    this.gameState.survivors.forEach((survivor) => {
+    this.gameState.userTeamSurvivors.forEach((survivor) => {
       if (!allStartPositions.includes(survivor.position)) {
         const newPosition = allStartPositions[
           Math.floor(Math.random() * allStartPositions.length)
@@ -203,10 +210,11 @@ export default class GameController {
       }
     });
 
-    this.gameState.userTeam = this.gameState.survivors.concat(newUserTeam);
+    this.gameState.userTeam = this.gameState.userTeamSurvivors.concat(newUserTeam);
+    this.gameState.userTeamSurvivors = [];
     this.gameState.compTeam = this.getCompTeam([
-      this.gameState.levelGame,
-      this.gameState.levelGame + this.gameState.getAllPlayer().length,
+      this.gameState.levelGame - 1,
+      this.gameState.userTeam.length,
     ]);
   }
 
@@ -266,7 +274,7 @@ export default class GameController {
       // Uncomment the following if you want to handle game ending
       // await this.checkGameOver();
 
-      this.gameState.survivors = this.gameState.userTeam;
+      this.gameState.userTeamSurvivors = this.gameState.userTeam;
       this.gamePlay.showModalMessage(
         `Level up! Your level ${this.gameState.levelGame} and total points are ${this.gameState.points}`,
         '9996',
@@ -395,7 +403,10 @@ export default class GameController {
   }
 
   updateSelectedCell(num) {
-    if (this.gameState.indexSelect && document.querySelector('.selected-yellow')) {
+    if (
+      this.gameState.indexSelect
+      && document.querySelector('.selected-yellow')
+    ) {
       this.gamePlay.deselectCell(this.gameState.indexSelect.yellow);
     }
     this.gameState.indexSelect = { yellow: num };
@@ -404,7 +415,9 @@ export default class GameController {
   handleInvalidSelection(num) {
     const isSelected = this.gameState.indexSelect;
     const isNotInAttackCells = !this.gameState.attackCells.includes(num);
-    const isComputerTeamPosition = this.gameState.compTeam.some((item) => item.position === num);
+    const isComputerTeamPosition = this.gameState.compTeam.some(
+      (item) => item.position === num,
+    );
 
     if (isSelected && isNotInAttackCells && isComputerTeamPosition) {
       this.gamePlay.showModalMessage("It can't be done", '9940');
@@ -432,7 +445,9 @@ export default class GameController {
 
   checkHealthRemoveDead(player) {
     if (player.character.health <= 0) {
-      const info = this.gameState.getPresumedDeceasedPlayerInfo(player.position);
+      const info = this.gameState.getPresumedDeceasedPlayerInfo(
+        player.position,
+      );
 
       if (info.index !== -1) {
         this.gameState[info.teamKey].splice(info.index, 1);
@@ -499,7 +514,9 @@ export default class GameController {
     do {
       rand = Math.floor(Math.random() * this.gameState.transitionCells.length);
       const potentialPosition = this.gameState.transitionCells[rand];
-      isPlayer = this.gameState.getAllPlayer().some((o) => o.position === potentialPosition);
+      isPlayer = this.gameState
+        .getAllPlayer()
+        .some((o) => o.position === potentialPosition);
     } while (isPlayer);
 
     return this.gameState.transitionCells[rand];

@@ -4,7 +4,7 @@ export default class GameState {
     this.gamePlay = gamePlay;
     this.isMove = 'user';
     this.countClick = 0;
-    this.survivors = [];
+    this.userTeamSurvivors = [];
     this.history = [];
     this.points = 0;
     this.block = false;
